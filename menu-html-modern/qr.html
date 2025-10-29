@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>QR Code – Menu</title>
+  <style>
+    body { margin:0; font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Inter; background:#0a0a0a; color:#f5f5f5; }
+    .container { max-width: 720px; margin: 0 auto; padding: 20px; text-align:center; }
+    input, button { padding:12px 14px; border:1px solid #1f1f1f; border-radius:999px; font-size:14px; background:transparent; color:#f5f5f5; }
+    button { background:#f5f5f5; color:#111; cursor:pointer; }
+    .controls { display:flex; gap:10px; flex-wrap:wrap; justify-content:center; margin: 14px 0; }
+    img { border: 1px solid #1f1f1f; border-radius: 20px; }
+    a { text-decoration:none; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>QR untuk Menu</h1>
+    <p>Masukkan URL situs menu (mis. https://menu.cotodaeng.com/) untuk mencetak QR.</p>
+    <div class="controls">
+      <input id="url" style="min-width:300px" />
+      <input id="size" type="number" value="512" style="width:120px" />
+      <a id="download" target="_blank" rel="noreferrer"><button>Download PNG</button></a>
+    </div>
+    <div>
+      <img id="qr" alt="QR Code"/>
+    </div>
+  </div>
+  <script>
+    const input = document.getElementById('url');
+    const size = document.getElementById('size');
+    const img = document.getElementById('qr');
+    const dl = document.getElementById('download');
+    function src() {
+      const s = Number(size.value||512);
+      const u = encodeURIComponent(input.value||location.origin + '/');
+      return `https://api.qrserver.com/v1/create-qr-code/?size=${s}x${s}&data=${u}`;
+    }
+    function render() {
+      img.src = src();
+      dl.href = src();
+      dl.download = 'qr-menu.png';
+    }
+    window.addEventListener('load', ()=>{
+      input.value = location.origin + '/';
+      render();
+    });
+    input.addEventListener('input', render);
+    size.addEventListener('input', render);
+  </script>
+</body>
+</html>
